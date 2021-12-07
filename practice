@@ -1,0 +1,48 @@
+CREATE TABLE users (
+  user_id SERIAL PRIMARY KEY,
+  user_email VARCHAR(50),
+  username VARCHAR(50),
+  user_firstname VARCHAR(50),
+  user_lastname VARCHAR(100),
+  user_password VARCHAR(500)
+);
+
+CREATE TABLE recipe (
+  recipe_id SERIAL PRIMARY KEY,
+  author_id INT NOT NULL REFERENCES users(user_id),
+  ingredients VARCHAR(1000),
+  instructions VARCHAR(4000),
+  recipe_occasions VARCHAR(40),
+  privacy boolean
+);
+
+
+CREATE TABLE public_recipe(
+  public_id SERIAL PRIMARY KEY,
+  recipe_id INT NOT NULL REFERENCES recipe(recipe_id),
+  privacy NOT NULL REFERENCES recipe(privacy)
+);
+
+CREATE TABLE private_recipe(
+  private_recipe SERIAL PRIMARY KEY,
+  recipe_id INT NOT NULL REFERENCES recipe(recipe_id),
+  privacy NOT NULL REFERENCES recipe(privacy)
+);
+
+
+CREATE TABLE userGroceryList (
+  grocery_id SERIAL PRIMARY KEY,
+  user_groceries INT NOT NULL REFERENCES users(user_id),
+  ingredients VARCHAR(1000) REFERENCES recipe(ingredients)
+);
+
+CREATE TABLE occasions (
+  occasions_id SERIAL PRIMARY KEY,
+  type_of_occasion VARCHAR(40),
+  recipe_occasions NOT NULL REFERENCES recipe(recipe_occasions)
+);
+
+CREATE TABLE viewer (
+  viewer_id SERIAL PRIMARY KEY,
+  recipe INT NOT NULL REFERENCES public_recipe(public_id)
+);
